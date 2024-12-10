@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Zone Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .converter {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        select, input, button {
+            padding: 5px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Time Zone Converter</h1>
+    <div class="converter">
+        <select id="fromZone">
+            <option value="America/New_York">EST</option>
+            <option value="America/Los_Angeles">PST</option>
+            <option value="Etc/GMT">GMT</option>
+            <option value="Asia/Singapore">Singapore</option>
+            <option value="Asia/Kolkata">IST</option>
+        </select>
+        <input type="datetime-local" id="fromTime">
+        <button onclick="setCurrentTime()">Set to Current Time</button>
+        <select id="toZone">
+            <option value="America/New_York">EST</option>
+            <option value="America/Los_Angeles">PST</option>
+            <option value="Etc/GMT">GMT</option>
+            <option value="Asia/Singapore">Singapore</option>
+            <option value="Asia/Kolkata">IST</option>
+        </select>
+        <div class="button-group">
+            <button onclick="convertTime()">Convert</button>
+        </div>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        function convertTime() {
+            const fromZone = document.getElementById('fromZone').value;
+            const toZone = document.getElementById('toZone').value;
+            const fromTime = document.getElementById('fromTime').value;
+
+            if (!fromTime) {
+                alert('Please enter a valid date and time.');
+                return;
+            }
+
+            const convertedTime = moment.tz(fromTime, fromZone).tz(toZone);
+            const result = convertedTime.format('YYYY-MM-DD HH:mm:ss z');
+
+            document.getElementById('result').innerText = `Converted time: ${result}`;
+        }
+
+        function setCurrentTime() {
+            const now = moment();
+            const fromZone = document.getElementById('fromZone').value;
+            const currentTimeInZone = now.tz(fromZone);
+            document.getElementById('fromTime').value = currentTimeInZone.format('YYYY-MM-DDTHH:mm');
+        }
+    </script>
+</body>
+</html>
